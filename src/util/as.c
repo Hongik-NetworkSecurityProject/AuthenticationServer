@@ -70,10 +70,10 @@ void makeCertificate(CERTIFICATE **certificate, RSA *rsaKeyAuthenticationServer,
         (*certificate) -> publicKey[i] = publicKey[i];
     
     int name_size = strlen((*certificate) -> name);
-    int public_key_size = strlen((*certificate) -> publickey);
+    int public_key_size = strlen((*certificate) -> publicKey);
 
     strcat(info, (*certificate) -> name);
-    strcat(info, (*certificate) -> publickey); // "Auth server" || pu(as)
+    strcat(info, (*certificate) -> publicKey); // "Auth server" || pu(as)
     
     uint8_t infoHash[HASH_SIZE];
     SHA256(info, strlen(info), infoHash); // h("Auth server" || pu(as))
@@ -84,11 +84,11 @@ void makeCertificate(CERTIFICATE **certificate, RSA *rsaKeyAuthenticationServer,
 }
 
 void makeTimestamp(uint8_t* timestamp){
-    time_t time;
+    time_t t;
     struct tm *localTime;
 
-    time(&time);
-    localTime = localtime(&time);
+    time(&t);
+    localTime = localtime(&t);
     timestamp[0]=localTime->tm_year;
     timestamp[1]=localTime->tm_mon;
     timestamp[2]=localTime->tm_mday;
@@ -100,7 +100,7 @@ void makeTimestamp(uint8_t* timestamp){
 }
 
 void makeToken(uint8_t* id, uint8_t* initialVectorUse, uint8_t* symmetricKey2, uint8_t* symmetricKeyAuthenticationServerFileServer, uint8_t* token){
-    uint8_t timestamp[CHALLENGE_TS_SIZE];
+    uint8_t timestamp[CHALLENGE_SIZE];
     uint8_t plaintext[TOKEN_SIZE];
 
     makeTimestamp(timestamp);
@@ -111,7 +111,7 @@ void makeToken(uint8_t* id, uint8_t* initialVectorUse, uint8_t* symmetricKey2, u
     for(int i=ID_SIZE,j=0;i<ID_SIZE+TIMESTAMP_SIZE;i++,j++)
         plaintext[i]=timestamp[j];
     
-    for(int i=ID_SIZE+CHALLENGE_TS_SIZE,j=0;i<TOKEN_SIZE;i++,j++)
+    for(int i=ID_SIZE+CHALLENGE_SIZE,j=0;i<TOKEN_SIZE;i++,j++)
         plaintext[i]=symmetricKey2[j];
     
     printToken(plaintext,PLAINTEXT);
@@ -121,7 +121,7 @@ void makeToken(uint8_t* id, uint8_t* initialVectorUse, uint8_t* symmetricKey2, u
 
 int verifyAuthenticationMessage(uint8_t *receiveChallenge, uint8_t *challenge){
     for(int i=0; i<CHALLENGE_SIZE; ++i){
-        if(recv_challenge[i] != challenge[i])
+        if(receiveChallenge[i] != challenge[i])
             return FALSE;
     }
     return TRUE;
