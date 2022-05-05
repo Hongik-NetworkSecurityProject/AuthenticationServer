@@ -3,4 +3,4 @@
 
 #include "macro.h"
 
-int enter_key();
+int enterKey();

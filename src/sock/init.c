@@ -26,7 +26,7 @@ int initServer(int *servSock,const char* argv){
     if(listen(*servSock, CLIENT_NUM) ==-1)
         errorHandler(LISTEN);
 
-    return 1;
+    return TRUE;
 }
 
 void initUserInfo(USER* user){
