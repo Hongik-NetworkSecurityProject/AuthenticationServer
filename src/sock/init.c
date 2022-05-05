@@ -13,7 +13,7 @@ int initServer(int *servSock,const char* argv){
 
     *servSock = socket(PF_INET, SOCK_STREAM, 0);
     if(*servSock == -1)
-        errorHandling(SOCKET);
+        errorHandler(SOCKET);
     
     memset(&servAddr, 0, sizeof(servAddr));
     servAddr.sin_family = AF_INET;
@@ -21,12 +21,24 @@ int initServer(int *servSock,const char* argv){
     servAddr.sin_port = htons(atoi(argv));
 
     if(bind(*servSock, (struct sockaddr*)&servAddr, sizeof(servAddr))==-1)
-        errorHandling(BIND);
+        errorHandler(BIND);
     
     if(listen(*servSock, 5)==-1)
-        errorHandling(LISTEN);
+        errorHandler(LISTEN);
 
     return 1;
+}
+
+void initUserInfo(USER* user){
+
+    uint8_t password[BUF_SIZE];
+
+    strcpy(password,"1234\n");
+    strcpy(user->id,"Alice\n");
+
+    // password must be hash value.
+    SHA256(password,strlen(password),user->passwordHash);
+    user->next=NULL;
 }
 
 void readChildProcess(int sig){
