@@ -10,4 +10,4 @@ typedef enum _error_code{
     READ
 }ERROR_CODE;
 
-void errorHandling(int errorType);
+void errorHandler(int errorType);
