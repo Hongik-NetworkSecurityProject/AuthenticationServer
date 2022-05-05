@@ -2,9 +2,7 @@
 #include "src/include/macro.h"
 #include "src/include/error.h"
 #include "src/include/openssl.h"
-
-#include "phase.h"
-#include "printText.h"
+#include "src/include/phase.h"
 
 int main(int argc, const char *argv[])
 {

@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "as.h"
+#include "security.h"
 #include "crypto.h"
 #include "error.h"
 #include "init.h"
