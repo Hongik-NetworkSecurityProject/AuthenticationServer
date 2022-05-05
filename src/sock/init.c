@@ -23,7 +23,7 @@ int initServer(int *servSock,const char* argv){
     if(bind(*servSock, (struct sockaddr*)&servAddr, sizeof(servAddr))==-1)
         errorHandler(BIND);
     
-    if(listen(*servSock, 5)==-1)
+    if(listen(*servSock, CLIENT_NUM) ==-1)
         errorHandler(LISTEN);
 
     return 1;
