@@ -1,6 +1,6 @@
 #include "../include/input.h"
 
-int enter_key(){
+int enterKey(){
     char message[BUF_SIZE];
     int ret;
     printf("\n");
