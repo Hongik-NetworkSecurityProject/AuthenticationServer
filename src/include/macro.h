@@ -1,6 +1,7 @@
 #define TRUE 1
 #define FALSE 0
 
+#define CLIENT_NUM 10
 #define ID_SIZE 16
 #define CHALLENGE_SIZE 16
 #define TIMESTAMP_SIZE 16
