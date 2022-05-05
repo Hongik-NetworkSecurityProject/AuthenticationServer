@@ -1,6 +1,6 @@
 #include "../include/error.h"
 
-void errorHandling(int errorType){
+void errorHandler(int errorType){
     switch (errorType){
         case ARGUMENT:
             printf("Incorrect Argument\n");
