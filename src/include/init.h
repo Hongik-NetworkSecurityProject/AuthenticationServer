@@ -1,3 +1,6 @@
+#ifndef __INIT__
+#define __INIT__
+
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -5,7 +8,9 @@
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
 #include "macro.h"
+#include "openssl.h"
 
 typedef struct __user_info{
     uint8_t id[ID_SIZE];
@@ -15,3 +20,5 @@ typedef struct __user_info{
 int initServer(int *servSock,const char* argv);
 int initUserInfo(USER* user);
 void readChildProcess(int sig);
+
+#endif

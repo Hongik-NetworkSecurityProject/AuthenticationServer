@@ -1,3 +1,6 @@
+#ifndef __MACRO__
+#define __MACRO__
+
 #define TRUE 1
 #define FALSE 0
 
@@ -25,3 +28,5 @@
 #define FILE_SIZE 1000000
 
 #define NEED_TOKEN_MSG "I need a token."
+
+#endif
