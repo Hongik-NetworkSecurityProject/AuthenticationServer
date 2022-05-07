@@ -44,17 +44,16 @@ int initUserInfo(USER* user){
         return FALSE;
     }
 
-    if((fpUserId = fopen("userID.txt", "rb"))==NULL){
+    if((fpUserPassword = fopen("userPassword.txt", "rb"))==NULL){
         printf("Phase 0 :: Cannot open file \"userPassword.txt\".\n");
         return FALSE;
     }
 
     for(int i=0; i< USER_NUM; i++){
-        fgets(user[i].id,ID_SIZE,fp1);        
-        fgets(user[i].pw_hash, BUF_SIZE, fp2);
-        SHA256(user[i].pw_hash, strlen(user[i].pw_hash), user[i].pw_hash);
+        fgets(user[i].id,ID_SIZE,fpUserId);        
+        fgets(user[i].passwordHash, HASH_SIZE, fpUserPassword);
+        SHA256(user[i].passwordHash, strlen(user[i].passwordHash), user[i].passwordHash);
     }
-    
     fclose(fpUserId);
     fclose(fpUserPassword);
     chdir("..");
