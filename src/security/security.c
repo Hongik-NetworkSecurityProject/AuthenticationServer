@@ -14,7 +14,7 @@ int authenticateUser(uint8_t* id,uint8_t* passwordHash,USER* user){
     printf("Phase 2 :: cannot find user.\n");
     return 0;
 }
-void encryptTokenMessage(uint8_t* encrypedTokenMessage, uint8_t* symmetricKey1, uint8_t* initialVectorUse, uint8_t* token, 
+void encryptTokenMessage(uint8_t* encryptedTokenMessage, uint8_t* symmetricKey1, uint8_t* initialVectorUse, uint8_t* token, 
                 uint8_t* symmetricKey2, uint8_t* certificateHash){
     
     uint8_t tokenMessage[MSG_SIZE];
@@ -28,7 +28,7 @@ void encryptTokenMessage(uint8_t* encrypedTokenMessage, uint8_t* symmetricKey1, 
     for(int i=TOKEN_SIZE+SYM_KEY_SIZE,j=0;i<MSG_SIZE;i++,j++)
         tokenMessage[i]=certificateHash[j];
 
-    encryptSymmetricKey(tokenMessage, encryptTokenMessage, MSG_SIZE, symmetricKey1, initialVectorUse);
+    encryptSymmetricKey(tokenMessage, encryptedTokenMessage, MSG_SIZE, symmetricKey1, initialVectorUse);
 }
 
 void getInformation(uint8_t* authenticationMessagePlainText, uint8_t* id, uint8_t* passwordHash, uint8_t* receiveChallenge){
