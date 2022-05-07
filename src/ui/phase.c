@@ -1,6 +1,6 @@
 #include "../include/phase.h"
 
-void phase0PreparationServer(int* fileSocket, uint8_t* symmetricKeyAuthenticationServerFileServer, int* serverSocket){
+void phase0PreparationServer(int* fileSocket, uint8_t* symmetricKeyAuthenticationServerFileServer, int* serverSocket, RSA* rsaKeyAuthenticationServer){
     struct sockaddr_in fsAddr;
     socklen_t fsAddrSize = sizeof(fsAddr);
 
@@ -27,14 +27,14 @@ void phase0PreparationServer(int* fileSocket, uint8_t* symmetricKeyAuthenticatio
     printEncryptedSymmetricKey(symmetricKeyAuthenticationServerFileServerEncrypted);
 
     puts("Phase 0 :: Decrypt encrypted symmetric key.");
-    rsaPrivateDecrypt(RSA_ENC_SIZE, symmetricKeyAuthenticationServerFileServerEncrypted, symmetricKeyAuthenticationServerFileServer, rsaKeyAuthenticationServer, RSA_PKCS1_PADDING);
+    RSA_private_decrypt(RSA_ENC_SIZE, symmetricKeyAuthenticationServerFileServerEncrypted, symmetricKeyAuthenticationServerFileServer, rsaKeyAuthenticationServer, RSA_PKCS1_PADDING);
     printSymmetricKey(symmetricKeyAuthenticationServerFileServer);
 
     close(*fileSocket);
     printFileServerDisconnection();
 }
 
-void phase1SendChallenge(int* clientSock,uint8_t *challenge, CERTIFICATE **certificate){
+void phase1SendChallenge(int* clientSock,uint8_t *challenge, CERTIFICATE **certificate, RSA* rsaKeyAuthenticationServer, RSA* rsaKeyCertificateAuthority){
     uint8_t encryptedTokenMessage[BUF_SIZE];
     read(*clientSock, encryptedTokenMessage, sizeof(NEED_TOKEN_MSG));
     
@@ -78,7 +78,7 @@ void phase1SendChallenge(int* clientSock,uint8_t *challenge, CERTIFICATE **certi
 
 }
 
-void phase2VerifyUserAndMessage(int *clientSock, uint8_t *symmetricKey1, uint8_t * initialVector, uint8_t *challenge, uint8_t *id, USER **user){
+void phase2VerifyUserAndMessage(int *clientSock, uint8_t *symmetricKey1, uint8_t * initialVector, uint8_t *challenge, uint8_t *id, USER **user ,RSA* rsaKeyAuthenticationServer){
     uint8_t symmetricKey1Encrypted[RSA_ENC_SIZE];
     uint8_t authenticationMessageCipher[AUTH_MSG_SIZE];
     uint8_t authenticationMessagePlainText[AUTH_MSG_SIZE];
@@ -97,7 +97,7 @@ void phase2VerifyUserAndMessage(int *clientSock, uint8_t *symmetricKey1, uint8_t
 
     // decrypt encrypted symmetric key .
     puts("Phase 2 :: Decrypt encrypted symmetric key.");
-    rsaPrivateDecrypt(RSA_ENC_SIZE, symmetricKey1Encrypted, symmetricKey1, rsaKeyAuthenticationServer, RSA_PKCS1_PADDING);
+    RSA_private_decrypt(RSA_ENC_SIZE, symmetricKey1Encrypted, symmetricKey1, rsaKeyAuthenticationServer, RSA_PKCS1_PADDING);
     printSymmetricKey(symmetricKey1);
 
     read(*clientSock, authenticationMessageCipher, AUTH_MSG_SIZE);
