@@ -3,6 +3,7 @@
 #include "src/include/error.h"
 #include "src/include/openssl.h"
 #include "src/include/phase.h"
+#include "src/include/printText.h"
 
 int main(int argc, const char *argv[])
 {
@@ -19,9 +20,13 @@ int main(int argc, const char *argv[])
 
     CERTIFICATE *certificate = NULL;
 
+    BIO *outAuthenticationServer = NULL, *outCertificateAuthority = NULL;
+    RSA *rsaKeyAuthenticationServer = NULL, *rsaKeyCertificateAuthority = NULL;
+    EVP_PKEY *pkeyAuthenticationServer = NULL, *pkeyCertificateAuthority = NULL;
+
     if(argc !=2){
         printf("Usage: %s <authentication server port>\n", argv[0]);
-        errorHandling(ARGUMENT);
+        errorHandler(ARGUMENT);
     }
 
     // generage rsa key for AS and CA
@@ -37,7 +42,7 @@ int main(int argc, const char *argv[])
     }
 
     certificate = (CERTIFICATE*)malloc(sizeof(CERTIFICATE));
-    USER *user = (USER*)malloc(sizeof(USER));
+    USER *user = (USER*)malloc(sizeof(USER) * USER_NUM);
     
     initServer(&servSock,argv[1]);
     if(!initUserInfo(user)){
@@ -45,7 +50,7 @@ int main(int argc, const char *argv[])
         exit(1);
     }
 
-    phase0PreparationServer(&fileSock,symmetricKeyAuthenticationServerFileServer, &servSock);
+    phase0PreparationServer(&fileSock,symmetricKeyAuthenticationServerFileServer, &servSock, rsaKeyAuthenticationServer);
     
     while(1){
         clntAddrSize = sizeof(clntAddr);
@@ -61,8 +66,8 @@ int main(int argc, const char *argv[])
         if(pid==0){
             close(servSock);
 
-            phase1SendChallenge(&clntSock, challenge, &certificate);
-            phase2VerifyUserAndMessage(&clntSock, symmetricKey1, initialVector, challenge,id, &user);
+            phase1SendChallenge(&clntSock, challenge, &certificate, rsaKeyAuthenticationServer , rsaKeyCertificateAuthority);
+            phase2VerifyUserAndMessage(&clntSock, symmetricKey1, initialVector, challenge,id, &user, rsaKeyAuthenticationServer);
             phase3SendToken(&clntSock, initialVector, id, symmetricKey1, symmetricKeyAuthenticationServerFileServer, certificate);
             printClientDisconnection();
             close(clntSock);
