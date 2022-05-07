@@ -40,7 +40,11 @@ int main(int argc, const char *argv[])
     USER *user = (USER*)malloc(sizeof(USER));
     
     initServer(&servSock,argv[1]);
-    initUserInfo(user);
+    if(!initUserInfo(user)){
+        printf("user info loaded error.\n");
+        exit(1);
+    }
+
     phase0PreparationServer(&fileSock,symmetricKeyAuthenticationServerFileServer, &servSock);
     
     while(1){
