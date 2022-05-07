@@ -1,17 +1,15 @@
 #include "../include/security.h"
 
 int authenticateUser(uint8_t* id,uint8_t* passwordHash,USER* user){
-    USER *iter = user;
-    while(iter!=NULL){
-        if(!strcmp(iter->id, id)){
-            for(int i=0; i<HASH_SIZE;++i)
-                if(passwordHash[i] != iter->passwordHash[i]){
-                    return FALSE;
+    for(int i=0;i<USER_NUM;i++){
+        if(!strcmp(user[i].id, id)){
+            for(int j=0; j<HASH_SIZE; j++){
+                if(user[i].passwordHash[j] != passwordHash[j]){
                     printf("Phase 2 :: password incorret.\n");
+                    return FALSE;
                 }
-            return TRUE;        
+            }
         }
-        iter = iter->next;
     }
     printf("Phase 2 :: cannot find user.\n");
     return 0;
