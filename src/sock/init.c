@@ -29,16 +29,36 @@ int initServer(int *servSock,const char* argv){
     return TRUE;
 }
 
-void initUserInfo(USER* user){
+int initUserInfo(USER* user){
 
-    uint8_t password[BUF_SIZE];
+    FILE* fpUserId = NULL;
+    FILE* fpUserPassword = NULL;
 
-    strcpy(password,"1234\n");
-    strcpy(user->id,"Alice\n");
+    if(chdir("./db")==-1){
+        puts("Phase 0 :: Cannot open directory \"db\".");
+        return FALSE;
+    }
 
-    // password must be hash value.
-    SHA256(password,strlen(password),user->passwordHash);
-    user->next=NULL;
+    if((fpUserId = fopen("userID.txt", "rb"))==NULL){
+        printf("Phase 0 :: Cannot open file \"userID.txt\".\n");
+        return FALSE;
+    }
+
+    if((fpUserId = fopen("userID.txt", "rb"))==NULL){
+        printf("Phase 0 :: Cannot open file \"userPassword.txt\".\n");
+        return FALSE;
+    }
+
+    for(int i=0; i< USER_NUM; i++){
+        fgets(user[i].id,ID_SIZE,fp1);        
+        fgets(user[i].pw_hash, BUF_SIZE, fp2);
+        SHA256(user[i].pw_hash, strlen(user[i].pw_hash), user[i].pw_hash);
+    }
+    
+    fclose(fpUserId);
+    fclose(fpUserPassword);
+    chdir("..");
+    return TRUE;
 }
 
 void readChildProcess(int sig){
