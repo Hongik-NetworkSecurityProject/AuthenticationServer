@@ -53,7 +53,7 @@ void phase1SendChallenge(int* clientSock,uint8_t *challenge, CERTIFICATE **certi
     makeCertificate(certificate,rsaKeyAuthenticationServer, rsaKeyCertificateAuthority);
     printCertificate(*certificate);
 
-    if(enter_key()==0) {
+    if(enterKey()==0) {
         printClientDisconnection();
         exit(0);
     }
@@ -78,7 +78,7 @@ void phase1SendChallenge(int* clientSock,uint8_t *challenge, CERTIFICATE **certi
 
 }
 
-void phase2VerifyUserAndMsg(int *clientSock, uint8_t *symmetricKey1, uint8_t * initialVector, uint8_t *challenge, uint8_t *id, USER **user){
+void phase2VerifyUserAndMessage(int *clientSock, uint8_t *symmetricKey1, uint8_t * initialVector, uint8_t *challenge, uint8_t *id, USER **user){
     uint8_t symmetricKey1Encrypted[RSA_ENC_SIZE];
     uint8_t authenticationMessageCipher[AUTH_MSG_SIZE];
     uint8_t authenticationMessagePlainText[AUTH_MSG_SIZE];
@@ -159,7 +159,7 @@ void phase3SendToken(int* clientSock, uint8_t* initialVector, uint8_t* id, uint8
     
     printEncryptedTokenMessage(encryptedTokenMessage);
 
-    if(enter_key()==0) {
+    if(enterKey()==0) {
         printClientDisconnection();
         exit(0);
     }
