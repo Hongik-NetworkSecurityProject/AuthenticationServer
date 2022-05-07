@@ -50,7 +50,7 @@ void printClientConnection(){
     puts("==================================================");
 }
 
-void printClientDisonnection(){
+void printClientDisconnection(){
     puts("==================================================");
     puts("\tDisconnected to Client\t");
     puts("==================================================");
