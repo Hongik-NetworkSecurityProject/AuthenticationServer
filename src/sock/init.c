@@ -39,12 +39,12 @@ int initUserInfo(USER* user){
         return FALSE;
     }
 
-    if((fpUserId = fopen("userID.txt", "rb"))==NULL){
+    if((fpUserId = fopen("userID.txt", "r"))==NULL){
         printf("Phase 0 :: Cannot open file \"userID.txt\".\n");
         return FALSE;
     }
 
-    if((fpUserPassword = fopen("userPassword.txt", "rb"))==NULL){
+    if((fpUserPassword = fopen("userPassword.txt", "r"))==NULL){
         printf("Phase 0 :: Cannot open file \"userPassword.txt\".\n");
         return FALSE;
     }
