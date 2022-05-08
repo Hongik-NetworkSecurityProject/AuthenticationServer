@@ -35,15 +35,15 @@ void phase0PreparationServer(int* fileSocket, uint8_t* symmetricKeyAuthenticatio
 }
 
 void phase1SendChallenge(int* clientSock,uint8_t *challenge, CERTIFICATE **certificate, RSA* rsaKeyAuthenticationServer, RSA* rsaKeyCertificateAuthority){
-    uint8_t encryptedTokenMessage[BUF_SIZE];
-    read(*clientSock, encryptedTokenMessage, sizeof(NEED_TOKEN_MSG));
+    uint8_t message[BUF_SIZE];
+    read(*clientSock, message, sizeof(NEED_TOKEN_MSG));
     
-    if(strcmp(encryptedTokenMessage, NEED_TOKEN_MSG) != 0){
-        puts("Phase 1 :: It's not a reqeust encryptedTokenMessage.");
+    if(strcmp(message, NEED_TOKEN_MSG) != 0){
+        puts("Phase 1 :: It's not a reqeust Message.");
         printClientDisconnection();
         exit(0);
     }
-    puts("Phase 1 :: Request encryptedTokenMessage received.");
+    puts("Phase 1 :: Request Message received.");
 
     puts("Phase 1 :: Make Challenge.");
     makeChallenge(challenge);
@@ -101,11 +101,11 @@ void phase2VerifyUserAndMessage(int *clientSock, uint8_t *symmetricKey1, uint8_t
     printSymmetricKey(symmetricKey1);
 
     read(*clientSock, authenticationMessageCipher, AUTH_MSG_SIZE);
-    puts("Phase 2 :: Authentication encryptedTokenMessage received.");
+    puts("Phase 2 :: Authentication Message received.");
     printAuthenticationMessage(authenticationMessageCipher,CIPHER);
 
-    // decrypt Authentication encryptedTokenMessage.
-    puts("Phase 2 :: Decrypt authentication encryptedTokenMessage.");
+    // decrypt Authentication Message.
+    puts("Phase 2 :: Decrypt authentication Message.");
     decryptSymmetricKey(authenticationMessageCipher, authenticationMessagePlainText, AUTH_MSG_SIZE, symmetricKey1, initialVectorUse);
     printAuthenticationMessage(authenticationMessagePlainText,PLAINTEXT);
 
